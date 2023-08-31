@@ -10,10 +10,7 @@ const Register = () => {
   const [error, setError] = useState('');
   const [username, setUsername] = useState('');
   const [data, setData] = useState([])
-  async function fetchFirebase() {
-    const userRef = collection(db, "users");
 
-  }
   const handleRegister = async () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -25,11 +22,11 @@ const Register = () => {
           const userDocRef = doc(db, "users", uid);
           await setDoc(userDocRef, {
     id: uid,
-    userDetails: [{
+    userDetails: {
       email: email,
       username:username,
       password:password
-    }],
+    },
     posts: []
           });
     
