@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { auth, db } from '../firebase'; // Importa auth
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import 'firebase/auth';
-import { setDoc, doc, collection } from 'firebase/firestore';
+import { setDoc, doc, updateDoc, arrayUnion, collection } from 'firebase/firestore';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -17,16 +17,17 @@ const Register = () => {
       // Una vez registrado el usuario, actualiza el displayName
           // Accede al UID del usuario recién creado
           const uid = userCredential.user.uid;
-
           // Crea una colección con el UID del usuario como nombre
           const userDocRef = doc(db, "users", uid);
+          const usernamesDocRef = doc(db, "users", "usernames")
+            await updateDoc(usernamesDocRef, {
+              ["usernames"]: arrayUnion(username)
+            });
           await setDoc(userDocRef, {
     id: uid,
-    userDetails: {
       email: email,
       username:username,
-      password:password
-    },
+      password:password,
     posts: []
           });
     

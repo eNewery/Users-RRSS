@@ -15,8 +15,18 @@ const Dashboard = () => {
   useEffect(() => {
 if (user.uid) {
   context.getUserDoc(user.uid) 
+
 }
   }, [user, context.clickCount])
+
+  useEffect(() => {
+if (context.data.id === user.uid) {
+  context.setProfile(true)
+}
+else{
+  context.setProfile(false)
+}
+  }, [context.data])
   
 useEffect(() => {
   // Suscríbete al estado de autenticación para obtener los cambios en el usuario
@@ -39,7 +49,6 @@ async function deletePost(postIdABorrar) {
         posts: newArray
       });
     context.setClickCount(prevCount => prevCount + 1);
-
 }
 async function handleSubmit() {
   try {
@@ -73,13 +82,19 @@ const diaActual = fechaActual.getDate();
   };
   return (
     <div>
-      {context.data.userDetails?.map(item => (
-        <div><p>{item.username}</p><p>{item.email}</p><p>{item.password}</p></div>
-      ))}
+
+        <div><p>{context.data.username}</p><p>{context.data.email}</p><p>{context.data.password}</p></div>
+
       <button onClick={handleLogout}>Cerrar Sesión</button>
-      <div><input type="text" placeholder='Title' onChange={(e) => setTitle(e.target.value)}/><input type="text" placeholder='Description' onChange={(e) => setDescription(e.target.value)}/><button onClick={handleSubmit}>Subir Post</button></div>
+      {context.profile === true ? <div><input type="text" placeholder='Title' onChange={(e) => setTitle(e.target.value)}/><input type="text" placeholder='Description' onChange={(e) => setDescription(e.target.value)}/><button onClick={handleSubmit}>Subir Post</button></div> : console.log("No es tu perfil")}
 {context.data.posts?.map(item => (
   <div>Title:{item.title} Description:{item.description} <button onClick={() => deletePost(item.postId)}>Eliminar Post</button></div>
+))}
+<form>
+<input type="search" onChange={(e) => context.setSearch(e.target.value)} placeholder='Nombre de usuario' /><button type='submit'>Buscar</button>
+</form>
+{context.results.map(item => (
+  <div key={item} onClick={() => context.getUserSearchDoc(item)}><p>{item}</p></div>
 ))}
    </div>
   )
