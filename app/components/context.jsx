@@ -13,14 +13,17 @@ const MiContexto = createContext();
 const MiContextoProvider = ({ children }) => {
   const [data, setData] = useState([]);
   const [clickCount, setClickCount] = useState(0);
-  const [profile, setProfile] = useState(true)
-
+  const [profile, setProfile] = useState(true);
   const [results, setResults] = useState([]);
   const [search, setSearch] = useState("");
   const [usernames, setUsernames] = useState([]);
+  const [friendsDataState, setFriendsDataState] = useState([])
   useEffect(() => {
     getUserSearchDocByName(search);
   }, [search]);
+  useEffect(() => {
+    data.friends?.map(item => (getFriendsPosts(item.id)))
+  }, [data.friends])
 
   async function getUserSearchDocByName(userName) {
     try {
@@ -28,7 +31,7 @@ const MiContextoProvider = ({ children }) => {
       const docSnapshot = await getDoc(usernamesDocRef);
       setUsernames(docSnapshot.data());
       const filtered = usernames.usernames.filter((item) =>
-      item.includes(userName)
+        item.username.includes(userName)
       );
       setResults(filtered);
       if (search === "") {
@@ -38,7 +41,21 @@ const MiContextoProvider = ({ children }) => {
       console.log("error", err);
     }
   }
+  const friendsData = [];
+  async function getFriendsPosts(userId) {
+    try {
+      
+      const usernamesDocRef = doc(db, "users", userId.toString());
+      const docSnapshot = await getDoc(usernamesDocRef);
+      console.log(docSnapshot.data())
+      friendsData.push(docSnapshot.data())
+      setFriendsDataState(friendsData)
 
+    } catch (error) {
+      console.error("Error al obtener el documento:", error);
+      return null;
+    }
+  }
   async function getUserSearchDoc(userId) {
     try {
       const q = query(
@@ -88,7 +105,14 @@ const MiContextoProvider = ({ children }) => {
         search,
         setSearch,
         results,
-        getUserSearchDoc, profile, setProfile
+        getUserSearchDoc,
+        profile,
+        setProfile,
+        usernames,
+        getFriendsPosts,
+        setFriendsDataState,
+        friendsDataState
+    
       }}
     >
       {children}

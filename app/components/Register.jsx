@@ -1,39 +1,55 @@
-import React, { useState } from 'react';
-import { auth, db } from '../firebase'; // Importa auth
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import 'firebase/auth';
-import { setDoc, doc, updateDoc, arrayUnion, collection } from 'firebase/firestore';
+import React, { useState } from "react";
+import { auth, db } from "../firebase"; // Importa auth
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import "firebase/auth";
+import {
+  setDoc,
+  doc,
+  updateDoc,
+  arrayUnion,
+  collection,
+} from "firebase/firestore";
 
 const Register = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [username, setUsername] = useState('');
-  const [data, setData] = useState([])
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [username, setUsername] = useState("");
+  const [data, setData] = useState([]);
 
   const handleRegister = async () => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       // Una vez registrado el usuario, actualiza el displayName
-          // Accede al UID del usuario recién creado
-          const uid = userCredential.user.uid;
-          // Crea una colección con el UID del usuario como nombre
-          const userDocRef = doc(db, "users", uid);
-          const usernamesDocRef = doc(db, "users", "usernames")
-            await updateDoc(usernamesDocRef, {
-              ["usernames"]: arrayUnion(username)
-            });
-          await setDoc(userDocRef, {
-    id: uid,
-      email: email,
-      username:username,
-      password:password,
-    posts: []
-          });
+      // Accede al UID del usuario recién creado
+      const uid = userCredential.user.uid;
+      updateProfile(auth.currentUser, {
+        displayName: username, photoURL: "https://example.com/jane-q-user/profile.jpg"
+      })
     
-          console.log('Usuario y colección creados exitosamente.');
-          
-setError("¡Usuario registrado correctamente!")
+      // Crea una colección con el UID del usuario como nombre
+      const userDocRef = doc(db, "users", uid);
+      const usernamesDocRef = doc(db, "users", "usernames");
+      await updateDoc(usernamesDocRef, {
+        ["usernames"]: arrayUnion({username:username, id:uid}),
+      });
+      await setDoc(userDocRef, {
+        id: uid,
+        email: email,
+        username: username,
+        password: password,
+        posts: [],
+        friendRequests: [],
+        friends: []
+      });
+
+      console.log("Usuario y colección creados exitosamente.");
+
+      setError("¡Usuario registrado correctamente!");
       // Registro exitoso, puedes redirigir al usuario a otra página
     } catch (err) {
       setError(err.message);
@@ -65,7 +81,6 @@ setError("¡Usuario registrado correctamente!")
       <button onClick={handleRegister}>Registrarse</button>
     </div>
   );
-}
+};
 
 export default Register;
-
