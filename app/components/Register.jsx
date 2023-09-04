@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { auth, db } from "../firebase"; // Importa auth
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import "firebase/auth";
@@ -6,9 +6,9 @@ import {
   setDoc,
   doc,
   updateDoc,
-  arrayUnion,
-  collection,
+  arrayUnion
 } from "firebase/firestore";
+import { MiContexto } from "./context";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -16,7 +16,7 @@ const Register = () => {
   const [error, setError] = useState("");
   const [username, setUsername] = useState("");
   const [data, setData] = useState([]);
-
+const context = useContext(MiContexto)
   const handleRegister = async () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -51,34 +51,63 @@ const Register = () => {
 
       setError("¡Usuario registrado correctamente!");
       // Registro exitoso, puedes redirigir al usuario a otra página
-    } catch (err) {
-      setError(err.message);
+    } catch (error) {
+      // Captura el error y muestra un mensaje de error personalizado según el tipo de error
+      switch (error.code) {
+        case "auth/invalid-email":
+          // Maneja el error de correo electrónico inválido aquí
+          setError("El formato del correo electrónico es incorrecto.");
+          break;
+        case "auth/user-not-found":
+          // Maneja el error de usuario no encontrado aquí
+          setError("No se encontró ningún usuario con este correo electrónico.");
+          break;
+        case "auth/wrong-password":
+          // Maneja el error de contraseña incorrecta aquí
+          setError("La contraseña es incorrecta.");
+          break;
+        default:
+          // Maneja otros errores aquí
+          setError("Ocurrió un error durante la autenticación:", error.message);
+      }
     }
+  
   };
 
   return (
-    <div>
-      <h1>Registro</h1>
-      {error ? error && <p>{error}</p> : <p>Regístrate</p>}
+    <div className="formContainer">
+      <div className="form">
+
+      <h1 className="formTitle">Registro</h1>
+      <div className="formInputs">
+      {error ? error && <p className="formError">{error}</p> : <p>Regístrate</p>}
       <input
         type="text"
         placeholder="Nombre de usuario"
+        className="formInput"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
-      />
+        />
       <input
         type="email"
         placeholder="Correo electrónico"
+        className="formInput"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-      />
+        />
       <input
         type="password"
         placeholder="Contraseña"
+        className="formInput"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={handleRegister}>Registrarse</button>
+        />
+      </div>
+        <div className="formButtons">
+      <button className="formBtn" onClick={handleRegister}>Registrarse</button>
+      <button className="formIsRegistered" onClick={() => context.setIsRegistered(!context.isRegistered)}>¿Ya tienes una cuenta?</button>
+        </div>
+        </div>
     </div>
   );
 };

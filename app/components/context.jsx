@@ -17,20 +17,21 @@ const MiContextoProvider = ({ children }) => {
   const [results, setResults] = useState([]);
   const [search, setSearch] = useState("");
   const [usernames, setUsernames] = useState([]);
-  const [friendsDataState, setFriendsDataState] = useState([])
+  const [friendsDataState, setFriendsDataState] = useState([]);
+  const [isRegistered, setIsRegistered] = useState(true);
   useEffect(() => {
     getUserSearchDocByName(search);
   }, [search]);
   useEffect(() => {
-    data.friends?.map(item => (getFriendsPosts(item.id)))
-  }, [data.friends])
+    data.friends?.map((item) => getFriendsPosts(item.id));
+  }, [data.friends]);
 
   async function getUserSearchDocByName(userName) {
     try {
       const usernamesDocRef = doc(db, "users", "usernames");
       const docSnapshot = await getDoc(usernamesDocRef);
       setUsernames(docSnapshot.data());
-      const filtered = usernames.usernames.filter((item) =>
+      const filtered = usernames.usernames?.filter((item) =>
         item.username.includes(userName)
       );
       setResults(filtered);
@@ -44,13 +45,11 @@ const MiContextoProvider = ({ children }) => {
   const friendsData = [];
   async function getFriendsPosts(userId) {
     try {
-      
       const usernamesDocRef = doc(db, "users", userId.toString());
       const docSnapshot = await getDoc(usernamesDocRef);
-      console.log(docSnapshot.data())
-      friendsData.push(docSnapshot.data())
-      setFriendsDataState(friendsData)
-
+      console.log(docSnapshot.data());
+      friendsData.push(docSnapshot.data());
+      setFriendsDataState(friendsData);
     } catch (error) {
       console.error("Error al obtener el documento:", error);
       return null;
@@ -111,8 +110,9 @@ const MiContextoProvider = ({ children }) => {
         usernames,
         getFriendsPosts,
         setFriendsDataState,
-        friendsDataState
-    
+        friendsDataState,
+        isRegistered, 
+        setIsRegistered
       }}
     >
       {children}
