@@ -17,6 +17,15 @@ const Dashboard = () => {
   const [isFriend, setIsFriend] = useState(false)
   const [addFriendBtn, setAddFriendBtn] = useState(false)
   const [file, setFile] = useState(null);
+  const [friends, setFriends] = useState(false)
+  const [friendsCount, setFriendsCount] = useState("")
+  const [friendsIcon, setFriendsIcon] = useState("")
+  useEffect(() => {
+friends == false ? setFriendsCount(context.data.friendRequests?.length) : setFriendsCount(context.data.friends?.length)
+friends == false ? setFriendsIcon("group_add") : setFriendsIcon("group")
+
+  }, [friends])
+  
   const router = useRouter();
   const context = useContext(MiContexto);
   const handleFileChange = (e) => {
@@ -231,7 +240,10 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="friendsContainer">
-          <div>
+        <span onClick={() => setFriends(!friends)} class="friendsRequestsBtn material-symbols-outlined">
+{friendsIcon} <p className="friendCount">{friendsCount}</p>
+</span>
+{friends === false ? <div>
             <p className="friendsCount">
               Amigos: {context.data.friends?.length}
             </p>{" "}
@@ -245,7 +257,31 @@ const Dashboard = () => {
                 </p>
               ))}
             </div>
+          </div> : user.displayName !== context.data.username ? console.log("No estás en tu perfil") :  <div className="friendRequestsContainerMedia">
+          <p className="friendRequestCount">
+            Solicitudes de amistad ({context.data.friendRequests?.length})
+          </p>
+          <div className="friendRequestItemsContainer">
+
+          <div className="friendRequestItemContainer">
+            {context.data.friendRequests?.map((item) => (
+              <p className="friendRequestItem">{item.userData}</p>
+              ))}
+            {context.data.friendRequests?.map((item) => (
+              <div className="friendRequestBtns">
+                
+              <span className="friendRequestItemBtn material-symbols-outlined" onClick={() => acceptFriend(item.userData, item.userId)}>
+                done
+              </span>
+              <span className="friendRequestItemBtn material-symbols-outlined" onClick={() => declineFriend(item.userData)}>
+              close
+            </span>
+              </div>
+            ))}
+            </div>
           </div>
+        </div>}
+          
         </div>
       </div>
 

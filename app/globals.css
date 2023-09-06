@@ -198,28 +198,15 @@ width: 1000px;
   gap: 1em;
   margin-top: 1em;
 }
-.backProfile:hover{
-  height: 48px;
-  width: 150px;
-  transition: 1s;
-}
+
 .backProfile {
   color: #7a7882;
   font-size: 48px !important;
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: center;
-  align-items: center;
   background-color: #37363e;
-  color: #7a7882;
-  padding: 0;
-  z-index: 10;
   border-radius: 1em;
   cursor: pointer;
   animation: appear 0.7s both;
   transition: 1s;
-  width: 48px;
-  height: 48px;
   position: absolute;
 left: 50px;
 }
@@ -323,6 +310,9 @@ opacity: 0;
 }
 .friendsCount {
   color: #7a7882;
+}
+.friendsRequestsBtn{
+  display: none !important;
 }
 /* Dashboard Friends */
 
@@ -474,3 +464,103 @@ width: 80%;
 }
 
 /* Dashboard Posts List*/
+
+
+/* Media Queries 768 */
+@media (max-width:800px) {
+/* Header 800 */
+.searchInput{
+  width: 300px;
+}
+.searchInput:focus ~ .searchItemContainer {
+  width: 300px;
+  }
+/* Header 800 */
+
+/* Form Post 800 */
+.formBtnPost{
+width: 100px;
+}
+.formInputPost{
+  width: 300px;
+}
+/* Form Post 800 */
+
+
+/* Profile 800 */
+.profileContainer{
+  width: 100%;
+}
+/* Profile 800 */
+
+/* Profile Friends 800 */
+.friendsContainer{
+  width: 100%;
+}
+.friendsRequestsBtn{
+  color: white;
+  background-color: #28272f;
+  padding: 0.2em;
+  border-radius: 1em;
+  cursor: pointer;
+  font-weight: 200 !important;
+  align-self: flex-end;
+  display: flex !important;
+  position: relative;
+}
+.friendCount{
+  font-size: 16px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  color: white;
+  display: inline ;
+}
+/* Profile Friends 800 */
+
+
+  /* Friend Requests 800 */
+  .friendRequestsContainer{
+    display: none;
+  }
+ 
+  /* Friend Requests 800 */
+
+  /* Dashboard Sections 800 */
+  .dashboardGeneral{
+    width: 540px;
+  }
+.dashboardSections{
+  flex-direction: column;
+  align-items: center;
+}
+  /* Dashboard Sections 800 */
+
+}
+/* Media Queries 800 */
+
+/* Media Queries 568 */
+@media (max-width:568px) {
+
+
+  /* Header 568 */
+.searchInput{
+  width: 150px;
+}
+.searchInput:focus ~ .searchItemContainer {
+width: 150px;
+}
+/* Header 568 */
+
+/* Form Post 568 */
+
+/* Form Post 568 */
+
+/* Dashboard Sections 568 */
+.dashboardGeneral{
+  width: 340px;
+}
+/* Dashboard Sections 568 */
+
+}
+/* Media Queries 568 */
