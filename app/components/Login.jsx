@@ -38,12 +38,14 @@ const Login = () => {
       }
     }
   };
+  const title = "Hola"
   return (
     <div className="formContainer">
+     
       <div className="form">
-      <h1 className="formTitle">Login</h1>
+      <h1 className="formTitle">Iniciar Sesión</h1>
       <div className="formInputs">
-      {error ? error && <p className="formError">{error}</p> : <p>Inicia Sesión</p>}
+      {error ? error && <p className="formError">{error}</p> : <p></p>}
       <input
       className="formInput"
       type="email"

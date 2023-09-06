@@ -1,3 +1,15 @@
+/* Keyframes */
+@keyframes appear {
+0%{transform: translateY(-2em); opacity: 0;}
+70%{opacity: 0;}
+100%{opacity: 1;}    
+}
+@keyframes dissapear {
+  0%{opacity: 1;}
+  100%{opacity: 0; transform: translateY(-1em);}
+}
+/* Keyframes */
+
 /* Reset CSS */
 * {
   margin: 0;
@@ -46,13 +58,13 @@ body {
   align-items: center;
   text-align: center;
   color: #fdfefd;
+  gap: 1em;
 }
 .formInput {
   background: #37363e;
   height: 50px;
   width: 300px;
   border: none;
-  margin-top: 1em;
   padding: 1em;
   color: #fdfefd;
 }
@@ -79,3 +91,278 @@ body {
   border-bottom: 2px solid #37363e;
 }
 /* Register & Login Component */
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+  background: url(../public/favicon/favicon-32x32.png);
+  background-position: center;
+  background-size: cover;
+}
+
+.header-center {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.searchInputContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.searchInput {
+  width: 500px;
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  background: #37363e;
+  height: 50px;
+  color: #fdfefd;
+  outline: none;
+}
+.searchItemContainer{
+  display: none;
+}
+.searchItemContainer:hover{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  width: 500px;
+  height: 30px;
+  background: #4c4a54;
+  color: white;
+  position: absolute;
+  top: 55px;
+}
+.searchInput:focus ~ .searchItemContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  width: 500px;
+  height: 30px;
+  background: #4c4a54;
+  color: white;
+  position: absolute;
+  top: 55px;
+}
+
+.searchItem {
+}
+.header-right {
+  margin-left: 20px;
+}
+
+.logout-button {
+  background-color: #37363e;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.logout-button:hover {
+  background-color: #4c4a54;
+}
+/* Header */
+
+/* Dashboard Sections */
+
+.dashboardSections {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+  margin-top: 1em;
+}
+.backProfile:hover{
+  height: 48px;
+  width: 150px;
+  transition: 1s;
+}
+.backProfile {
+  color: #7a7882;
+  font-size: 48px !important;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+  background-color: #37363e;
+  color: #7a7882;
+  padding: 0;
+  z-index: 10;
+  border-radius: 1em;
+  cursor: pointer;
+  animation: appear 0.7s both;
+  transition: 1s;
+  width: 48px;
+  height: 48px;
+  position: absolute;
+left: 50px;
+}
+/* Dashboard Sections */
+
+/* Dashboard Perfil */
+.profileContainer {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  height: 300px;
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #37363e;
+}
+
+.profileImage {
+  width: 128px;
+  height: 128px;
+  background: url(./components/images/perfil.png);
+  background-position: bottom;
+  background-size: contain;
+  border-radius: 50%;
+  display: flex;
+}
+.profileImage img {
+  object-fit: cover;
+  border: 2px solid #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  margin-bottom: 10px;
+}
+
+.profileUsername {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+  color: #9b9b9b;
+  margin-top: 1em;
+}
+.isFriend{
+
+}
+.addFriendBtn{
+  background: #28272f;
+  border: none;
+  border-radius: 0.5em;
+  padding: 0.3em;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  width: 200px;
+  height: 40px;
+  position: relative;
+  top: 1.5em;
+}
+.addFriendBtnDiss{
+  cursor: auto;
+  animation: dissapear 1s both;
+}
+.profileEmail {
+  font-size: 16px;
+  color: #777;
+}
+.profileSettingsBtn {
+  position: relative;
+  bottom: 20px;
+  left: 120px;
+  color: white;
+}
+/* Dashboard Perfil */
+
+/* Dashboard Friends */
+.friendsContainer {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  height: 300px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #37363e;
+  padding: 20px;
+}
+.friendsCount {
+  color: #7a7882;
+}
+/* Dashboard Friends */
+
+/* Dashboard Friends Requests */
+.friendRequestsContainer {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  height: 300px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #37363e;
+  padding: 20px;
+}
+.friendRequestCount {
+  color: #7a7882;
+}
+.friendsCardContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+  color: #7a7882;
+  height: 100%;
+  margin-top: 1em;
+}
+.friendItem {
+  cursor: pointer;
+}
+/* Dashboard Friends Requests */
+
+/* Dashboard Post Form */
+.formPost{
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    height: 100px;
+}
+.formInputPost{
+    background: #37363e;
+    height: 50px;
+    width: 300px;
+    border: none;
+    padding: 1em;
+    color: #fdfefd;
+    border-top-left-radius: 1em;
+    border-bottom-left-radius: 1em;
+    outline: none;
+}
+.formBtnPost{
+    width: 300px;
+    height: 50px;
+    background: #ffffff;
+    color: black;
+    border-top-right-radius: 1em;
+    border-bottom-right-radius: 1em;
+    padding: 1em;
+    border: none;
+    cursor: pointer;
+}

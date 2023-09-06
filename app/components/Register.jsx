@@ -78,9 +78,9 @@ const context = useContext(MiContexto)
     <div className="formContainer">
       <div className="form">
 
-      <h1 className="formTitle">Registro</h1>
+      <h1 className="formTitle">Registrarse</h1>
       <div className="formInputs">
-      {error ? error && <p className="formError">{error}</p> : <p>Regístrate</p>}
+      {error ? error && <p className="formError">{error}</p> : <p></p>}
       <input
         type="text"
         placeholder="Nombre de usuario"

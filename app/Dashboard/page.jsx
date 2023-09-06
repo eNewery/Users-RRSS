@@ -1,15 +1,30 @@
 "use client";
 import React, { useContext, useState, useEffect } from "react";
-import { doc, updateDoc, arrayUnion, arrayRemove, query, collection, getDocs, where } from "firebase/firestore";
+import {
+  doc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+  query,
+  collection,
+  getDocs,
+  where,
+} from "firebase/firestore";
 import UserDetails from "../components/userDetails";
 import { db } from "../firebase";
 import { auth } from "../firebase";
 import { MiContexto } from "../components/context";
 import { useRouter } from "next/navigation";
+import Header from "../components/Header";
 const Dashboard = () => {
   const [user, setUser] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [isFriend, setIsFriend] = useState(false)
+  const [addFriendBtn, setAddFriendBtn] = useState(false)
+
+  let addFriendTitle = ""
+  addFriendBtn === false ? addFriendTitle = "Añadir Amigo" : addFriendTitle = "Solicitud enviada" 
   const router = useRouter();
   const context = useContext(MiContexto);
   useEffect(() => {
@@ -62,8 +77,7 @@ const Dashboard = () => {
       const day = `${diaActual}/${mesActual}/${añoActual}`;
       const hour = `${horaActual}:${minutosActuales}`;
       const newPost = {
-        title: title,
-        description: description,
+        text: title,
         day: day,
         hour: hour,
         postId: id,
@@ -78,18 +92,14 @@ const Dashboard = () => {
       console.error("Error al actualizar el campo:", error);
     }
   }
-  const handleLogout = async () => {
-    try {
-      await auth.signOut();
-      // Cierre de sesión exitoso, puedes redirigir al usuario a otra página o realizar otras acciones
-    } catch (error) {
-      console.error("Error al cerrar sesión:", error);
-    }
-  };
+
   async function addFriend() {
     const docRef = doc(db, "users", context.data.id.toString());
     await updateDoc(docRef, {
-      ["friendRequests"]: arrayUnion({userData:user.displayName, userId:user.uid}),
+      ["friendRequests"]: arrayUnion({
+        userData: user.displayName,
+        userId: user.uid,
+      }),
     });
   }
   async function declineFriend(friend) {
@@ -101,68 +111,117 @@ const Dashboard = () => {
   }
   async function acceptFriend(friend, id) {
     const docReference = doc(db, "users", id.toString());
-    const filtered = context.data.friendRequests.filter(item => item.userData !== friend)
+    const filtered = context.data.friendRequests.filter(
+      (item) => item.userData !== friend
+    );
     await updateDoc(docReference, {
-      ["friends"]: arrayUnion({username:user.displayName, id:user.uid}),
+      ["friends"]: arrayUnion({ username: user.displayName, id: user.uid }),
     });
     const docRef = doc(db, "users", user.uid.toString());
     await updateDoc(docRef, {
       ["friendRequests"]: filtered,
-      ["friends"]: arrayUnion({username:friend, id:id}),
+      ["friends"]: arrayUnion({ username: friend, id: id }),
     });
     context.setClickCount((prevCount) => prevCount + 1);
   }
- 
+  function buscarAmigoPorNombreDeUsuario() {
+    const amigoEncontrado = context.data.friends?.find(item => item.username === user.displayName);
+  
+    if (amigoEncontrado) {
+      setIsFriend(false);
+    } else {
+      setIsFriend(true);
+    }
+  }
+  useEffect(() => {
+    buscarAmigoPorNombreDeUsuario()
+  }, [context.data])
   
   return (
     <div>
-      {user.displayName !== context.data.username ? <button onClick={() => context.getUserSearchDoc(user.displayName)}>Mi Perfil</button> : <p>Perfil de {context.data.username}</p>}
-      
-      <div>
-        <p>{context.data.username}</p>
-        <p>{context.data.email}</p>
-        <p>{context.data.password}</p>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+      <Header />
+      {user.displayName !== context.data.username ? (
+        <div className="backProfileContainer"><span className="backProfile material-symbols-outlined" onClick={() => context.getUserSearchDoc(user.displayName)}>
+          account_circle
+        </span></div>
+      ) : (
+        console.log("Estás en tu perfil")
+      )}
+      <div className="dashboardSections">
+        {user.displayName !== context.data.username ? console.log("No estás en tu perfil") :  <div className="friendRequestsContainer">
+          <p className="friendRequestCount">
+            Solicitudes de amistad ({context.data.friendRequests?.length})
+          </p>
+        </div>}
+       
+        <div class="profileContainer">
+          {user.displayName !== context.data.username ? (
+            console.log("No estás en tu perfil")
+          ) : (
+            <span class="profileSettingsBtn material-symbols-outlined">
+              settings
+            </span>
+          )}
+
+          <div class="profileImage"></div>
+          <div class="profileInfo">
+            <h1 class="profileUsername">{context.data.username}</h1>
+            <p class="profileEmail">{context.data.email}</p>
+            {user.displayName !== context.data.username ? isFriend === false ? <p className="isFriend">¡Ya son amigos! </p> : <div>{addFriendBtn === false ? <div onClick={() => setAddFriendBtn(!addFriendBtn)}><button className="addFriendBtn" onClick={() => addFriend()}>Añadir Amigo</button></div> : <button className="addFriendBtn addFriendBtnDiss">Solicitud Enviada</button>}</div> : console.log("Estás en tu perfil")}
+            
+          </div>
+        </div>
+        <div className="friendsContainer">
+          <div>
+            <p className="friendsCount">
+              Amigos: {context.data.friends?.length}
+            </p>{" "}
+            <div className="friendsCardContainer">
+              {context.data.friends?.map((item) => (
+                <p
+                  className="friendItem"
+                  onClick={() => context.getUserSearchDoc(item.username)}
+                >
+                  {item.username}
+                </p>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
-      <button onClick={handleLogout}>Cerrar Sesión</button>
       {context.profile === true ? (
         <div>
-          <div><p>Solicitudes de amistad ({context.data.friendRequests?.length})</p>{context.data.friendRequests?.map(item => (<p>{item.userData}</p>))} {context.data.friendRequests?.map(item => (<button onClick={() => acceptFriend(item.userData, item.userId)}>Aceptar</button>))}</div>
-         <div><p>Amigos: {context.data.friends?.length}</p> <div>{context.data.friends?.map(item => (<p onClick={() => context.getUserSearchDoc(item.username)}>{item.username}</p>))}</div></div>
+          <div>
+            {context.data.friendRequests?.map((item) => (
+              <p>{item.userData}</p>
+            ))}
+            {context.data.friendRequests?.map((item) => (
+              <button onClick={() => acceptFriend(item.userData, item.userId)}>
+                Aceptar
+              </button>
+            ))}
+          </div>
+<div className="formPost">
           <input
+          className="formInputPost"
             type="text"
-            placeholder="Title"
+            placeholder="Qué tienes para contar?"
             onChange={(e) => setTitle(e.target.value)}
           />
-          <input
-            type="text"
-            placeholder="Description"
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          <button onClick={handleSubmit}>Subir Post</button>
+          <button className="formBtnPost" onClick={handleSubmit}>Subir Post</button>
+</div>
         </div>
       ) : (
         <div>
-         {context.data.friends.map(item => item.username.includes(user.displayName)) ? <p>Ya son amigos!</p> : <button onClick={() => addFriend()}>Añadir Amigo</button>} 
+          
         </div>
       )}
       {context.data.posts?.map((item) => (
         <div>
-          Title:{item.title} Description:{item.description}{" "}
+          Title:{item.title}
           <button onClick={() => deletePost(item.postId)}>Eliminar Post</button>
-        </div>
-      ))}
-      <form>
-        <input
-          type="search"
-          onChange={(e) => context.setSearch(e.target.value)}
-          placeholder="Nombre de usuario"
-        />
-        <button type="submit">Buscar</button>
-      </form>
-      {context.results.map((item) => (
-        <div key={item.id} onClick={() => context.getUserSearchDoc(item.username)}>
-          <p>{item.username}</p>
         </div>
       ))}
     </div>
