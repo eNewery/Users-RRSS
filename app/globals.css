@@ -6,6 +6,7 @@
 }
 @keyframes dissapear {
   0%{opacity: 1;}
+  50%{opacity:1;}
   100%{opacity: 0; transform: translateY(-1em);}
 }
 /* Keyframes */
@@ -182,7 +183,15 @@ body {
 /* Header */
 
 /* Dashboard Sections */
-
+.dashboardGeneralContainer{
+  display: flex;
+  flex-direction: column;
+align-items: center;
+  width: 100%;
+}
+.dashboardGeneral{
+width: 1000px;
+}
 .dashboardSections {
   display: flex;
   justify-content: center;
@@ -231,11 +240,19 @@ left: 50px;
   align-items: center;
   background-color: #37363e;
 }
-
+.profileImageContainer{
+  display: flex;
+  height: 128px;
+}
+.inputFile{
+position: absolute;
+height: 128px;
+width: 128px;
+opacity: 0;
+}
 .profileImage {
   width: 128px;
   height: 128px;
-  background: url(./components/images/perfil.png);
   background-position: bottom;
   background-size: contain;
   border-radius: 50%;
@@ -272,6 +289,7 @@ left: 50px;
 }
 .addFriendBtnDiss{
   cursor: auto;
+  box-shadow: inset 0 0 0 0 #28272f;
   animation: dissapear 1s both;
 }
 .profileEmail {
@@ -279,10 +297,13 @@ left: 50px;
   color: #777;
 }
 .profileSettingsBtn {
-  position: relative;
-  bottom: 20px;
-  left: 120px;
   color: white;
+  background-color: #28272f;
+  padding: 0.2em;
+  border-radius: 1em;
+  cursor: pointer;
+  font-weight: 200 !important;
+  align-self: flex-end;
 }
 /* Dashboard Perfil */
 
@@ -315,12 +336,14 @@ left: 50px;
   text-align: center;
   display: flex;
   flex-direction: column;
+  justify-content: start;
   align-items: center;
   background-color: #37363e;
   padding: 20px;
 }
 .friendRequestCount {
   color: #7a7882;
+  margin-bottom: 1em;
 }
 .friendsCardContainer {
   display: flex;
@@ -335,6 +358,24 @@ left: 50px;
 .friendItem {
   cursor: pointer;
 }
+.friendRequestItemsContainer{
+display: flex;
+flex-direction: column;
+height: 100%;
+}
+.friendRequestItemContainer{
+  display: flex;
+  align-items: center;
+  color: #7a7882;
+  margin-top: 1em;
+  gap: 1em;
+}
+.friendRequestItem{
+}
+.friendRequestItemBtn{
+  font-size: 16px;
+cursor: pointer;
+}
 /* Dashboard Friends Requests */
 
 /* Dashboard Post Form */
@@ -342,12 +383,12 @@ left: 50px;
     display: flex;
     justify-content: center;
     align-items: end;
-    height: 100px;
+    height: 70px;
 }
 .formInputPost{
     background: #37363e;
     height: 50px;
-    width: 300px;
+width: 80%;
     border: none;
     padding: 1em;
     color: #fdfefd;
@@ -356,7 +397,7 @@ left: 50px;
     outline: none;
 }
 .formBtnPost{
-    width: 300px;
+    width: 20%;
     height: 50px;
     background: #ffffff;
     color: black;
@@ -366,3 +407,70 @@ left: 50px;
     border: none;
     cursor: pointer;
 }
+/* Dashboard Post Form */
+
+/* Dashboard Posts List*/
+.postsContainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.post {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  margin-top: 10px;
+  width: 100%;
+  background-color: #37363e;
+  height: 150px;
+  display:flex;
+  flex-direction: column;
+  border-radius: 0.5em;
+}
+
+.postHeader {
+  display: flex;
+  color: #9b9b9b;
+  align-items: center;
+}
+.postText{
+  display: flex;
+  height: 50%;
+  justify-content: start;
+  align-items: end;
+  color: #aeacb5;
+
+}
+.postHeader .profileImage {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.postHeader h3 {
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  height: 50%;
+}
+
+.timestamp {
+  font-size: 12px;
+  color: #888;
+}
+
+.deleteButton {
+  background-color: #28272f;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+/* Dashboard Posts List*/

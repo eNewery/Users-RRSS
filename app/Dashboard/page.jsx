@@ -3,30 +3,58 @@ import React, { useContext, useState, useEffect } from "react";
 import {
   doc,
   updateDoc,
-  arrayUnion,
-  arrayRemove,
-  query,
-  collection,
-  getDocs,
-  where,
+  arrayUnion
 } from "firebase/firestore";
-import UserDetails from "../components/userDetails";
-import { db } from "../firebase";
-import { auth } from "../firebase";
+import { auth, db, storage } from "../firebase";
 import { MiContexto } from "../components/context";
 import { useRouter } from "next/navigation";
-import Header from "../components/Header";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import Header from "../components/Header";  
 const Dashboard = () => {
   const [user, setUser] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isFriend, setIsFriend] = useState(false)
   const [addFriendBtn, setAddFriendBtn] = useState(false)
-
-  let addFriendTitle = ""
-  addFriendBtn === false ? addFriendTitle = "Añadir Amigo" : addFriendTitle = "Solicitud enviada" 
+  const [file, setFile] = useState(null);
   const router = useRouter();
   const context = useContext(MiContexto);
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+  };
+
+  useEffect(() => {
+    handleUpload()
+  }, [file])
+  const handleUpload = async () => {
+    if (!file) return;
+  
+    try {
+      // Subir la foto a Firebase Storage
+      const fileName = file.name;
+      const storageReference = ref(storage, `images/${fileName}`); 
+  
+      // Utilizamos 'put' en lugar de 'uploadBytes'
+      const snapshot = await uploadBytes(storageReference, file);
+  
+      // Obtener el enlace de descarga
+      const downloadURL = await getDownloadURL(snapshot.ref); 
+  
+      const docRef = doc(db, "users", user.uid.toString());
+      await updateDoc(docRef, {
+        image: downloadURL,
+      });
+  
+      // Limpiar el archivo seleccionado después de la carga exitosa
+      setFile(null);
+    context.setClickCount((prevCount) => prevCount + 1);
+    } catch (error) {
+      console.error("Error al cargar la foto:", error);
+    }
+  };
+  
+  
   useEffect(() => {
     if (user.uid) {
       context.getUserDoc(user.uid);
@@ -73,7 +101,11 @@ const Dashboard = () => {
       const mesActual = fechaActual.getMonth() + 1;
       const diaActual = fechaActual.getDate();
       const horaActual = fechaActual.getHours();
-      const minutosActuales = fechaActual.getMinutes();
+      let minutosActuales = fechaActual.getMinutes();
+      if (minutosActuales >= 1 && minutosActuales <= 9) {
+        minutosActuales = "0" + minutosActuales;
+      }
+      
       const day = `${diaActual}/${mesActual}/${añoActual}`;
       const hour = `${horaActual}:${minutosActuales}`;
       const newPost = {
@@ -104,10 +136,12 @@ const Dashboard = () => {
   }
   async function declineFriend(friend) {
     const docRef = doc(db, "users", context.data.id.toString());
+    const filtered = context.data.friendRequests.filter(item => item.userData !== friend)
     await updateDoc(docRef, {
-      ["friendRequests"]: arrayRemove(friend),
+      ["friendRequests"]: filtered,
     });
     context.setClickCount((prevCount) => prevCount + 1);
+    console.log(friend)
   }
   async function acceptFriend(friend, id) {
     const docReference = doc(db, "users", id.toString());
@@ -148,11 +182,32 @@ const Dashboard = () => {
       ) : (
         console.log("Estás en tu perfil")
       )}
+      <div className="dashboardGeneralContainer">
+<div className="dashboardGeneral">
       <div className="dashboardSections">
         {user.displayName !== context.data.username ? console.log("No estás en tu perfil") :  <div className="friendRequestsContainer">
           <p className="friendRequestCount">
             Solicitudes de amistad ({context.data.friendRequests?.length})
           </p>
+          <div className="friendRequestItemsContainer">
+
+          <div className="friendRequestItemContainer">
+            {context.data.friendRequests?.map((item) => (
+              <p className="friendRequestItem">{item.userData}</p>
+              ))}
+            {context.data.friendRequests?.map((item) => (
+              <div className="friendRequestBtns">
+                
+              <span className="friendRequestItemBtn material-symbols-outlined" onClick={() => acceptFriend(item.userData, item.userId)}>
+                done
+              </span>
+              <span className="friendRequestItemBtn material-symbols-outlined" onClick={() => declineFriend(item.userData)}>
+              close
+            </span>
+              </div>
+            ))}
+            </div>
+          </div>
         </div>}
        
         <div class="profileContainer">
@@ -163,8 +218,11 @@ const Dashboard = () => {
               settings
             </span>
           )}
-
-          <div class="profileImage"></div>
+          <div className="profileImageContainer">
+<img class="profileImage"src={context.data.image} alt="" />
+<input className="inputFile" type="file"  onChange={handleFileChange} />
+          </div>
+          
           <div class="profileInfo">
             <h1 class="profileUsername">{context.data.username}</h1>
             <p class="profileEmail">{context.data.email}</p>
@@ -193,22 +251,13 @@ const Dashboard = () => {
 
       {context.profile === true ? (
         <div>
-          <div>
-            {context.data.friendRequests?.map((item) => (
-              <p>{item.userData}</p>
-            ))}
-            {context.data.friendRequests?.map((item) => (
-              <button onClick={() => acceptFriend(item.userData, item.userId)}>
-                Aceptar
-              </button>
-            ))}
-          </div>
+         
 <div className="formPost">
           <input
           className="formInputPost"
-            type="text"
-            placeholder="Qué tienes para contar?"
-            onChange={(e) => setTitle(e.target.value)}
+          type="text"
+          placeholder="Qué tienes para contar?"
+          onChange={(e) => setTitle(e.target.value)}
           />
           <button className="formBtnPost" onClick={handleSubmit}>Subir Post</button>
 </div>
@@ -218,13 +267,25 @@ const Dashboard = () => {
           
         </div>
       )}
+      <div className="postsContainer">
+
       {context.data.posts?.map((item) => (
-        <div>
-          Title:{item.title}
-          <button onClick={() => deletePost(item.postId)}>Eliminar Post</button>
+        <div class="post">
+        <div class="postHeader">
+          <img class="profileImage" src={context.data.image} alt="" />
+          <h3>{context.data.username}</h3>
         </div>
+        <p className="postText">{item.text}</p>
+        <div class="actions">
+          <span class="timestamp">{item.day} / {item.hour}</span>
+          <button class="deleteButton" onClick={() => deletePost(item.postId)}>Eliminar</button>
+        </div>
+      </div>
       ))}
+      </div>
     </div>
+      </div>
+      </div>
   );
 };
 

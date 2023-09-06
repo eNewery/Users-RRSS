@@ -42,6 +42,7 @@ const context = useContext(MiContexto)
         email: email,
         username: username,
         password: password,
+        image: "https://firebasestorage.googleapis.com/v0/b/usertasks-41c2a.appspot.com/o/perfil.png?alt=media&token=206c7c88-a408-469b-ad5c-805531e3d845",
         posts: [],
         friendRequests: [],
         friends: []
