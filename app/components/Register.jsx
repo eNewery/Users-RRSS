@@ -15,6 +15,8 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [username, setUsername] = useState("");
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
   const [data, setData] = useState([]);
 const context = useContext(MiContexto)
   const handleRegister = async () => {
@@ -40,12 +42,15 @@ const context = useContext(MiContexto)
       await setDoc(userDocRef, {
         id: uid,
         email: email,
+        firstName: firstName,
+        lastName: lastName,
         username: username,
         password: password,
         image: "https://firebasestorage.googleapis.com/v0/b/usertasks-41c2a.appspot.com/o/perfil.png?alt=media&token=206c7c88-a408-469b-ad5c-805531e3d845",
         posts: [],
         friendRequests: [],
-        friends: []
+        friends: [],
+        private:false
       });
 
       console.log("Usuario y colección creados exitosamente.");
@@ -82,6 +87,19 @@ const context = useContext(MiContexto)
       <h1 className="formTitle">Registrarse</h1>
       <div className="formInputs">
       {error ? error && <p className="formError">{error}</p> : <p></p>}
+      <input
+        type="text"
+        placeholder="Nombre"
+        className="formInput"
+        value={firstName}
+        onChange={(e) => setFirstName(e.target.value)}
+        /><input
+        type="text"
+        placeholder="Apellido"
+        className="formInput"
+        value={lastName}
+        onChange={(e) => setLastName(e.target.value)}
+        />
       <input
         type="text"
         placeholder="Nombre de usuario"

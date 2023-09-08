@@ -10,7 +10,9 @@ const Login = () => {
   const router = useRouter();
   const context = useContext(MiContexto)
   const handleLogin = async () => {
+    const loginContent = document.querySelector(".formBtn")
     try {
+      loginContent.textContent = "..."
       await signInWithEmailAndPassword(auth, email, password); // Usa auth para createUserWithEmailAndPassword
       setError("Sesión iniciada correctamente!");
       setTimeout(() => {
@@ -18,6 +20,8 @@ const Login = () => {
       }, 1000);
       // Registro exitoso, puedes redirigir al usuario a otra página
     } catch (error) {
+      loginContent.textContent = "Iniciar Sesión"
+
       // Captura el error y muestra un mensaje de error personalizado según el tipo de error
       switch (error.code) {
         case "auth/invalid-email":
