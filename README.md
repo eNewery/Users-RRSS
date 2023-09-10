@@ -7,3 +7,4 @@ Funciones disponibles:
 • Buscar usuarios
 • Cambiar la foto de perfil
 • Subir nuevo post
+• Colocar la privacidad de la cuenta en privado o público en tiempo real
