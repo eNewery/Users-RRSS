@@ -12,6 +12,8 @@ import {
 const MiContexto = createContext();
 const MiContextoProvider = ({ children }) => {
   const [data, setData] = useState([]);
+  const [title, setTitle] = useState("");
+  const [dashboardContent, setDashboardContent] = useState("personalPage")
   const [clickCount, setClickCount] = useState(0);
   const [profile, setProfile] = useState(true);
   const [results, setResults] = useState([]);
@@ -19,12 +21,51 @@ const MiContextoProvider = ({ children }) => {
   const [usernames, setUsernames] = useState([]);
   const [friendsDataState, setFriendsDataState] = useState([]);
   const [isRegistered, setIsRegistered] = useState(true);
+  const [user, setUser] = useState([])
+  const [userData ,setUserData] = useState([])
+  const [posts, setPosts] = useState([])
+  const postPush = [];
+ 
   useEffect(() => {
     getUserSearchDocByName(search);
   }, [search]);
   useEffect(() => {
-    data.friends?.map((item) => getFriendsPosts(item.id));
-  }, [data.friends]);
+    userData.friends?.map(item => getFriendsPosts(item.id))
+    console.log("userData Function was working", userData)
+  }, [userData.length, userData.id, userData.friends])
+  useEffect(() => {
+    // Suscríbete al estado de autenticación para obtener los cambios en el usuario
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+      } else {
+        console.log("Ha ocurrido un error al iniciar sesión.")
+      }
+    });
+
+    // Limpia la suscripción cuando el componente se desmonta
+    return () => unsubscribe();
+  }, []);
+ 
+  function compararPorFechaYHora(postA, postB) {
+    const fechaA = new Date(postA.day + ' ' + postA.hour);
+    const fechaB = new Date(postB.day + ' ' + postB.hour);
+  
+    return fechaA - fechaB;
+  }
+  useEffect(() => {
+  friendsDataState.map(item => postPush.push(item.posts))
+  console.log("Post Push antes:", postPush)
+  const objetosCombinados = postPush.reduce((resultado, arreglo) => resultado.concat(arreglo), []);
+  console.log("Objetos antes:", objetosCombinados)
+  console.log("Post Push despues:", postPush)
+
+  objetosCombinados.sort(compararPorFechaYHora)
+  console.log("Objetos despues:", objetosCombinados)
+
+  setPosts(objetosCombinados)  
+  
+}, [friendsDataState])
 
   async function getUserSearchDocByName(userName) {
     try {
@@ -42,6 +83,13 @@ const MiContextoProvider = ({ children }) => {
       console.log("error", err);
     }
   }
+    async function getYourUserData(userId){
+        const usernamesDocRef = doc(db, "users", userId.toString());
+        const docSnapshot = await getDoc(usernamesDocRef);
+        setUserData(docSnapshot.data())
+  }
+
+  
   const friendsData = [];
   async function getFriendsPosts(userId) {
     try {
@@ -75,6 +123,39 @@ const MiContextoProvider = ({ children }) => {
     } catch (error) {
       console.error("Error al obtener el documento:", error);
       return null;
+    }
+  }
+  async function handleSubmit() {
+    try {
+      const fechaActual = new Date();
+      const id = Date.now();
+      const añoActual = fechaActual.getFullYear();
+      const mesActual = fechaActual.getMonth() + 1;
+      const diaActual = fechaActual.getDate();
+      const horaActual = fechaActual.getHours();
+      let minutosActuales = fechaActual.getMinutes();
+      if (minutosActuales >= 1 && minutosActuales <= 9) {
+        minutosActuales = "0" + minutosActuales;
+      }
+
+      const day = `${diaActual}/${mesActual}/${añoActual}`;
+      const hour = `${horaActual}:${minutosActuales}`;
+      const newPost = {
+        text: title,
+        day: day,
+        hour: hour,
+        postId: id,
+        user:context.data.username,
+        image:context.data.image
+      };
+      const docRef = doc(db, "users", user.uid.toString());
+      await updateDoc(docRef, {
+        ["posts"]: arrayUnion(newPost),
+      });
+      context.setClickCount((prevCount) => prevCount + 1);
+      console.log("Campo actualizado exitosamente");
+    } catch (error) {
+      console.error("Error al actualizar el campo:", error);
     }
   }
   async function getUserDoc(idDocumento) {
@@ -112,8 +193,10 @@ const MiContextoProvider = ({ children }) => {
         setFriendsDataState,
         friendsDataState,
         isRegistered, 
-        setIsRegistered
-      }}
+        setIsRegistered,
+        dashboardContent,
+         setDashboardContent,
+         user, setUser, userData, setUserData, getYourUserData, handleSubmit, posts}}
     >
       {children}
     </MiContexto.Provider>

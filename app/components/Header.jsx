@@ -5,6 +5,7 @@ import { auth } from '../firebase'
 const Header = () => {
     const handleLogout = async () => {
         try {
+          context.setDashboardContent("personalPage")
           await auth.signOut();
           // Cierre de sesión exitoso, puedes redirigir al usuario a otra página o realizar otras acciones
         } catch (error) {
@@ -14,9 +15,9 @@ const Header = () => {
     const context = useContext(MiContexto)
   return (
     <header class="header">
-        
-        <div class="header-left">
-            
+        <div class="headerLeft">
+            <div onClick={() => context.setDashboardContent("dashboardFeed")} className="headerLeftLogo"></div>
+            <button onClick={() => context.setDashboardContent("personalPage")} className='myAccount'>Mi Perfil</button>
         </div>
         <div class="header-center">
             <div className="searchInputContainer">
