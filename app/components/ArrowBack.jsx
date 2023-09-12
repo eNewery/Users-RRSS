@@ -4,7 +4,7 @@ const ArrowBack = ({data}) => {
   return (
     <span
                     onClick={() => data("")}
-                    class="arrowBack material-symbols-outlined"
+                    className="arrowBack material-symbols-outlined"
                   >
                     arrow_back
                   </span>

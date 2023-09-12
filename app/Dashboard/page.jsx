@@ -6,6 +6,8 @@ import Header from "../components/Header";
 import PersonalPage from "../components/PersonalPage";
 import { MiContexto } from "../components/context";
 import DashboardFeed from "../components/DashboardFeed";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const Dashboard = () => {
   const router = useRouter();
   const context = useContext(MiContexto)
@@ -24,15 +26,17 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div>
+      <div>
+
       <link
         rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-      />
+        />
       <Header />
-      {context.dashboardContent === "personalPage" ? <PersonalPage/> : context.dashboardContent === "dashboardFeed" ? <DashboardFeed/> : console.log("Ha ocurrido un error con el contenido del Dashboard.") }
+      {context.dashboardContent === "personalPage" ? <PersonalPage/> : context.dashboardContent === "dashboardFeed" ? <DashboardFeed/> : "" }
+<ToastContainer/>
       
-    </div>
+        </div>
   );
 };
 

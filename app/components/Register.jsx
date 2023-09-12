@@ -53,7 +53,7 @@ const context = useContext(MiContexto)
         private:false
       });
 
-      console.log("Usuario y colección creados exitosamente.");
+      
 
       setError("¡Usuario registrado correctamente!");
       // Registro exitoso, puedes redirigir al usuario a otra página

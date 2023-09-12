@@ -1,7 +1,8 @@
 import { MiContextoProvider } from './components/context'
 import './globals.css'
 import { Inter } from 'next/font/google'
-import Head from "next/head";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -13,6 +14,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
+      
+        
     <MiContextoProvider>
 <link rel="apple-touch-icon" sizes="120x120" href="/favicon/apple-touch-icon.png"/>
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png"/>

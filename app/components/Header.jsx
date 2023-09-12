@@ -12,25 +12,32 @@ const Header = () => {
           console.error("Error al cerrar sesión:", error);
         }
       };
+      function goPersonalPage() {
+        context.setDashboardContent("personalPage")
+        context.getUserDoc(context.user.uid)
+      }
     const context = useContext(MiContexto)
   return (
-    <header class="header">
-        <div class="headerLeft">
-            <div onClick={() => context.setDashboardContent("dashboardFeed")} className="headerLeftLogo"></div>
-            <button onClick={() => context.setDashboardContent("personalPage")} className='myAccount'>Mi Perfil</button>
+    <header className="header">
+        <div className="headerLeft">
+            <div  className="headerLeftLogo"></div>
+            <nav className='btnNavList'>
+            <button onClick={() => context.setDashboardContent("dashboardFeed")} className='myAccount'>Feed</button>
+            <button onClick={() => goPersonalPage()} className='myAccount'>Mi Perfil</button>
+            </nav>
         </div>
-        <div class="header-center">
+        <div className="header-center">
             <div className="searchInputContainer">
-            <input type="text" class="searchInput" onChange={(e) => context.setSearch(e.target.value)} placeholder="Buscar..."/>
-            {context.results.map((item) => (
+            <input type="text" className="searchInput" onChange={(e) => context.setSearch(e.target.value)} placeholder="Buscar..."/>
+            {context.results?.map((item) => (
         <div className='searchItemContainer' key={item.id} onClick={() => context.getUserSearchDoc(item.username)}>
           <p className='searchItem'>{item.username}</p>
         </div>
       ))}
             </div>
         </div>
-        <div class="header-right">
-            <button onClick={handleLogout} class="logout-button">Cerrar Sesión</button>
+        <div className="header-right">
+            <button onClick={handleLogout} className="logout-button">Cerrar Sesión</button>
         </div>
     </header>
   )

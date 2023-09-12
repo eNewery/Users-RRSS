@@ -8,6 +8,8 @@ import {
   query,
   where,
   getDocs,
+  updateDoc,
+  arrayUnion
 } from "firebase/firestore";
 const MiContexto = createContext();
 const MiContextoProvider = ({ children }) => {
@@ -19,6 +21,7 @@ const MiContextoProvider = ({ children }) => {
   const [results, setResults] = useState([]);
   const [search, setSearch] = useState("");
   const [usernames, setUsernames] = useState([]);
+  const [modalSettings, setModalSettings] = useState(false);
   const [friendsDataState, setFriendsDataState] = useState([]);
   const [isRegistered, setIsRegistered] = useState(true);
   const [user, setUser] = useState([])
@@ -31,7 +34,6 @@ const MiContextoProvider = ({ children }) => {
   }, [search]);
   useEffect(() => {
     userData.friends?.map(item => getFriendsPosts(item.id))
-    console.log("userData Function was working", userData)
   }, [userData.length, userData.id, userData.friends])
   useEffect(() => {
     // Suscríbete al estado de autenticación para obtener los cambios en el usuario
@@ -39,7 +41,6 @@ const MiContextoProvider = ({ children }) => {
       if (currentUser) {
         setUser(currentUser);
       } else {
-        console.log("Ha ocurrido un error al iniciar sesión.")
       }
     });
 
@@ -55,13 +56,9 @@ const MiContextoProvider = ({ children }) => {
   }
   useEffect(() => {
   friendsDataState.map(item => postPush.push(item.posts))
-  console.log("Post Push antes:", postPush)
   const objetosCombinados = postPush.reduce((resultado, arreglo) => resultado.concat(arreglo), []);
-  console.log("Objetos antes:", objetosCombinados)
-  console.log("Post Push despues:", postPush)
 
   objetosCombinados.sort(compararPorFechaYHora)
-  console.log("Objetos despues:", objetosCombinados)
 
   setPosts(objetosCombinados)  
   
@@ -80,7 +77,6 @@ const MiContextoProvider = ({ children }) => {
         setResults([]);
       }
     } catch (err) {
-      console.log("error", err);
     }
   }
     async function getYourUserData(userId){
@@ -95,7 +91,6 @@ const MiContextoProvider = ({ children }) => {
     try {
       const usernamesDocRef = doc(db, "users", userId.toString());
       const docSnapshot = await getDoc(usernamesDocRef);
-      console.log(docSnapshot.data());
       friendsData.push(docSnapshot.data());
       setFriendsDataState(friendsData);
     } catch (error) {
@@ -117,7 +112,6 @@ const MiContextoProvider = ({ children }) => {
           }
         });
       } else {
-        console.log("No se encontraron documentos.");
         return null;
       }
     } catch (error) {
@@ -134,7 +128,7 @@ const MiContextoProvider = ({ children }) => {
       const diaActual = fechaActual.getDate();
       const horaActual = fechaActual.getHours();
       let minutosActuales = fechaActual.getMinutes();
-      if (minutosActuales >= 1 && minutosActuales <= 9) {
+      if (minutosActuales >= 0 && minutosActuales <= 9) {
         minutosActuales = "0" + minutosActuales;
       }
 
@@ -145,17 +139,18 @@ const MiContextoProvider = ({ children }) => {
         day: day,
         hour: hour,
         postId: id,
-        user:context.data.username,
-        image:context.data.image
+        user:data.username,
+        userId:user.uid,
+        image:data.image,
+        postPrivacity:false
       };
       const docRef = doc(db, "users", user.uid.toString());
       await updateDoc(docRef, {
         ["posts"]: arrayUnion(newPost),
       });
-      context.setClickCount((prevCount) => prevCount + 1);
-      console.log("Campo actualizado exitosamente");
+      
+      setClickCount((prevCount) => prevCount + 1);
     } catch (error) {
-      console.error("Error al actualizar el campo:", error);
     }
   }
   async function getUserDoc(idDocumento) {
@@ -166,15 +161,15 @@ const MiContextoProvider = ({ children }) => {
       if (docSnapshot.exists()) {
         setData(docSnapshot.data());
       } else {
-        console.log("El documento no existe.");
         return null;
       }
     } catch (error) {
-      console.error("Error al obtener el documento:", error);
       return null;
     }
   }
+
   return (
+    
     <MiContexto.Provider
       value={{
         getUserDoc,
@@ -196,7 +191,7 @@ const MiContextoProvider = ({ children }) => {
         setIsRegistered,
         dashboardContent,
          setDashboardContent,
-         user, setUser, userData, setUserData, getYourUserData, handleSubmit, posts}}
+         user, setUser, userData, setUserData, getYourUserData, handleSubmit, posts, title, setTitle, modalSettings, setModalSettings }}
     >
       {children}
     </MiContexto.Provider>

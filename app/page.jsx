@@ -1,4 +1,5 @@
 "use client"
+
 import Login from "./components/Login"
 import Register from "./components/Register"
 import { useContext } from "react";

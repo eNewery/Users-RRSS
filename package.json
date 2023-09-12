@@ -9,9 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "encoding": "^0.1.13",
     "firebase": "^10.3.0",
     "next": "13.4.19",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-toastify": "^9.1.3"
   }
 }

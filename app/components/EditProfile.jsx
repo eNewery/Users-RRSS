@@ -4,29 +4,29 @@ import { MiContexto } from './context'
 const EditProfile = () => {
     const context = useContext(MiContexto)
   return (
-    <form class="formulario">
-<div class="inputContainer">
+    <form className="formulario">
+<div className="inputContainer">
 <label for="nombreInput">Nombre</label>
-<input defaultValue={context.data.firstName} type="text" id="nombreInput" class="nombreInput" name="nombre" required/>
+<input defaultValue={context.data.firstName} type="text" id="nombreInput" className="nombreInput" name="nombre" required/>
 </div>
 
-<div class="inputContainer">
+<div className="inputContainer">
 <label for="apellidoInput">Apellido</label>
-<input defaultValue={context.data.lastName} type="text" id="apellidoInput" class="apellidoInput" name="apellido" required/>
+<input defaultValue={context.data.lastName} type="text" id="apellidoInput" className="apellidoInput" name="apellido" required/>
 </div>
 
-<div class="inputContainer">
+<div className="inputContainer">
 <label for="usuarioInput">Nombre de Usuario</label>
-<input defaultValue={context.data.username} type="text" id="usuarioInput" class="usuarioInput" name="usuario" required/>
+<input defaultValue={context.data.username} type="text" id="usuarioInput" className="usuarioInput" name="usuario" required/>
 </div>
 
-<div class="inputContainer">
+<div className="inputContainer">
 <label for="emailInput">E-mail</label>
-<input defaultValue={context.data.email} type="email" id="emailInput" class="emailInput" name="email" required/>
+<input defaultValue={context.data.email} type="email" id="emailInput" className="emailInput" name="email" required/>
 </div>
 
 <button className="formBtnPerfil">Editar Perfil</button>
-<button class="cambiarContrasenaButton">¿Deseas cambiar tu contraseña?</button>
+<button className="cambiarContrasenaButton">¿Deseas cambiar tu contraseña?</button>
 </form>
   )
 }
