@@ -13,6 +13,7 @@ import {
 } from "firebase/firestore";
 const MiContexto = createContext();
 const MiContextoProvider = ({ children }) => {
+  const [modalData, setModalData] = useState([]);
   const [data, setData] = useState([]);
   const [title, setTitle] = useState("");
   const [dashboardContent, setDashboardContent] = useState("personalPage")
@@ -167,11 +168,36 @@ const MiContextoProvider = ({ children }) => {
       return null;
     }
   }
+  useEffect(() => {
+    for (let i = 0; i < 1; i++) {
+      getUserDoc(user.uid)       
+    }   
+  }, [user])
+  useEffect(() => {
+getUserDoc(data.id)
+  }, [clickCount])
+  
+  
+  async function getUserModalDoc(idDocumento) {
+    try {
+      const docRef = doc(db, "users", idDocumento.toString());
+      const docSnapshot = await getDoc(docRef);
 
+      if (docSnapshot.exists()) {
+        setModalData(docSnapshot.data());
+      } else {
+        return null;
+      }
+    } catch (error) {
+      return null;
+    }
+  }
+  const colors = [{colorName:"blue", colorId:1}, {colorName:"red", colorId:2}, {colorName:"green", colorId:3}, {colorName:"yellow", colorId:4}, {colorName:"purple", colorId:5}, {colorName:"orange", colorId:6}, {colorName:"pink", colorId:7}, {colorName:"black", colorId:8}, {colorName:"brown", colorId:9}, {colorName:"grey", colorId:10}]
   return (
     
     <MiContexto.Provider
       value={{
+        colors,
         getUserDoc,
         data,
         clickCount,
@@ -191,7 +217,7 @@ const MiContextoProvider = ({ children }) => {
         setIsRegistered,
         dashboardContent,
          setDashboardContent,
-         user, setUser, userData, setUserData, getYourUserData, handleSubmit, posts, title, setTitle, modalSettings, setModalSettings }}
+         user, setUser, userData, setUserData, getYourUserData, handleSubmit, posts, title, setTitle, modalSettings, setModalSettings, getUserModalDoc, modalData, setModalData }}
     >
       {children}
     </MiContexto.Provider>

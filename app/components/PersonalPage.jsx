@@ -9,6 +9,7 @@ import ArrowBack from "./ArrowBack";
 import Privacity from "./Privacity";
 import ProfileSection from "./ProfileSection";
 import { toast } from "react-toastify";
+import EditAvatar from "./EditAvatar";
 
 const PersonalPage = () => {
   const [itemPrivacity, setItemPrivacity] = useState("");
@@ -49,11 +50,7 @@ const PersonalPage = () => {
       : body.classList.remove("hiddenOverflow");
   }, [context.modalSettings]);
 
-  useEffect(() => {
-    if (context.user.uid) {
-      context.getUserDoc(context.user.uid);
-    }
-  }, [context.user, context.clickCount]);
+
 
   useEffect(() => {
     if (context.data.id === context.user.uid) {
@@ -230,7 +227,7 @@ const PersonalPage = () => {
               style: { backgroundColor: "#37363e" },
             }
           );
-          context.setClickCount((prevCount) => prevCount + 1);
+          context.getUserDoc(context.data.id)
         } else {
           console.error("No se encontró el objeto con el postId especificado.");
         }
@@ -254,6 +251,7 @@ function handleSubmit() {
       style: { backgroundColor: "#37363e" },
     }
   );
+  context.getUserDoc(context.data.id)
   context.handleSubmit()
 }
   function closeModal() {
@@ -292,6 +290,13 @@ function handleSubmit() {
                 ) : (
                   ""
                 )}
+                    {context.profile === true ? (
+                      <button onClick={() => setModalContent("editAvatar")}>
+                        Editar Avatar
+                      </button>
+                    ) : (
+                      ""
+                    )}
                 {context.profile === true ? (
                   <button onClick={() => setModalContent("privacity")}>
                     Privacidad
@@ -335,22 +340,15 @@ function handleSubmit() {
                 <ArrowBack data={setModalContent} />
                 <Privacity setPrivacity={setPrivacity} />
               </div>
+            ) : modalContent === "editAvatar" ? (
+              <div className="privacityContainer allModalContent">
+                <ArrowBack data={setModalContent} />
+                <EditAvatar/>
+              </div>
             ) : (
               setModalContent("")
             )}
           </div>
-        </div>
-      ) : (
-        ""
-      )}
-      {context.user.displayName !== context.data.username ? (
-        <div className="backProfileContainer">
-          <span
-            className="backProfile material-symbols-outlined"
-            onClick={() => context.getUserSearchDoc(context.user.displayName)}
-          >
-            account_circle
-          </span>
         </div>
       ) : (
         ""
@@ -395,12 +393,13 @@ function handleSubmit() {
 
             <ProfileSection />
             <div className="friendsContainer">
-              <span
+              {context.profile === true ? <span
                 onClick={() => setFriends(!friends)}
                 className="friendsRequestsBtn material-symbols-outlined"
               >
                 {friendsIcon} <p className="friendCount">{friendsCount}</p>
-              </span>
+              </span> : ""}
+              
               {friends === false ? (
                 <div>
                   <p className="friendsCount">
@@ -506,17 +505,17 @@ function handleSubmit() {
                 ))}
               </div>
             </div>
-          ) : context.data.private === true ? (
-            isYourFriend === false ? (
+          ) : context.data.private === true ? ( // Si la cuenta es privada
+            isYourFriend === false ? ( // Si la cuenta es privada y no es tu amigo
               <p className="privatePosts">
                 <span className="material-symbols-outlined">block</span>Los
                 posts de esta cuenta son privados{" "}
                 <span className="material-symbols-outlined">block</span>
               </p>
-            ) : (
+            ) : ( // Si la cuenta es privada y es tu amigo
               <div className="postsContainer">
               {context.data.posts?.map((item) =>
-                item.postPrivacity === false ? (
+                item.postPrivacity === false ? ( // Si la cuenta es privada es tu amigo y el post es público
                   <div key={item.postId} className="post">
                     <div className="postHeader">
                       <img
@@ -531,14 +530,14 @@ function handleSubmit() {
                       <span className="timestamp">
                         {item.day} / {item.hour}
                       </span>
-                      {context.profile === true ? (
+                      {context.profile === true ? ( // Si estás en tu cuenta
                         <button
                           className="deleteButton"
                           onClick={() => deletePost(item.postId)}
                         >
                           Eliminar
                         </button>
-                      ) : (
+                      ) : ( // Si no estás en tu cuenta (no hace nada)
                         ""
                       )}
                     </div>
@@ -562,10 +561,10 @@ function handleSubmit() {
               )}
             </div>
             )
-          ) : (
+          ) : ( // Si la cuenta no es privada
             <div className="postsContainer">
               {context.data.posts?.map((item) =>
-                item.postPrivacity === false ? (
+                item.postPrivacity === false ? ( // Si la cuenta no es privada y el post es público
                   <div key={item.postId} className="post">
                     <div className="postHeader">
                       <img
@@ -592,7 +591,7 @@ function handleSubmit() {
                       )}
                     </div>
                   </div>
-                ) : (
+                ) : ( // Si la cuenta no es privada pero el post es privado
                   <div className="post privatePost">
                     <div className="postHeader">
                       <img

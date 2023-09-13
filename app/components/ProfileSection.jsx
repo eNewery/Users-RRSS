@@ -1,7 +1,9 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { MiContexto } from './context'
 import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
-import { db } from '../firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { db, storage } from '../firebase';
+import { toast } from 'react-toastify';
 
 const ProfileSection = () => {
     const [addFriendBtn, setAddFriendBtn] = useState(false);
@@ -83,9 +85,16 @@ const [request, setRequest] = useState(false)
           await updateDoc(docRef, {
             image: downloadURL,
           });
-    
+          const postsActualizados = context.data.posts.map(post => ({
+            ...post,
+            image: downloadURL
+          }));
+          await updateDoc(docRef, {
+            posts: postsActualizados
+          });
           // Limpiar el archivo seleccionado después de la carga exitosa
           setFile(null);
+          context.getUserDoc(context.data.id)
           context.setClickCount((prevCount) => prevCount + 1);
         } catch (error) {
           console.error("Error al cargar la foto:", error);

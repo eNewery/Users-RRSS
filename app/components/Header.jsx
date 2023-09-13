@@ -23,7 +23,13 @@ const Header = () => {
             <div  className="headerLeftLogo"></div>
             <nav className='btnNavList'>
             <button onClick={() => context.setDashboardContent("dashboardFeed")} className='myAccount'>Feed</button>
+            <span onClick={() => context.setDashboardContent("dashboardFeed")} class="myAccountMedia material-symbols-outlined">
+forum
+</span>
             <button onClick={() => goPersonalPage()} className='myAccount'>Mi Perfil</button>
+            <span onClick={() => goPersonalPage()} class="myAccountMedia material-symbols-outlined">
+person
+</span>
             </nav>
         </div>
         <div className="header-center">
@@ -38,6 +44,9 @@ const Header = () => {
         </div>
         <div className="header-right">
             <button onClick={handleLogout} className="logout-button">Cerrar Sesión</button>
+            <span onClick={handleLogout} class="myAccountMedia material-symbols-outlined">
+logout
+</span>
         </div>
     </header>
   )
