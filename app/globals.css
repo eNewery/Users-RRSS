@@ -402,171 +402,6 @@ padding: 10px;
 /* Modal Edit Profile */
 
 
-/* Modal Edit Avatar */
-
-.modalEditAvatarContainer{
-  display: flex;
-}
-/* Colors */
-.colors{
-  display: grid;
-  gap: 0;
-  height: 50px;
-  grid-template-columns:1fr 1fr 1fr 1fr;
-}
-.color{
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-}
-.blue{
-  background-color: blue !important;
-}
-.red{
-  background-color: red !important;
-}
-.green{
-  background-color: green !important;
-}
-.yellow{
-  background-color: yellow !important;
-}
-.purple{
-  background-color: purple !important;
-}
-.orange{
-  background-color: orange !important;
-}
-.pink{
-  background-color: pink !important;
-}
-.black{
-  background-color: black !important;
-}
-.brown{
-  background-color: brown !important;
-}
-.grey{
-  background-color: grey !important;
-}
-.white{
-  background-color: white !important;
-}
-/* Colors */
-
-/* Contenedor principal de la persona */
-  .persona {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* Cabeza */
-.cabeza {
-    width: 80px;
-    height: 80px;
-    background-color: #f7ddc4;
-    border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-  position:relative;
-  top:1.3em;
-  border:1px solid black;
-}
-
-/* Ojos */
-.ojos {
-    display: flex;
-    align-items: center;
-}
-
-.ojo {
-    width: 20px;
-    height: 20px;
-    background-color: #000;
-    border-radius: 50%;
-    margin: 5px;
-}
-
-/* Nariz */
-.boca {
-    width: 30px;
-    height: 15px;
-    background-color: #000;
-    border-bottom-left-radius: 50%;
-    border-bottom-right-radius: 50%;
-  
-}
-
-
-
-/* Camisa */
-.camisa {
-    width: 60px;
-    height: 100px;
-    background-color: #0077b6;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  border-top-left-radius: 3em;
-    border-top-right-radius: 3em;
-  border:1px solid black;
-}
-
-/* Brazos */
-.brazos {
-    display: flex;
-    justify-content: space-between;
-    width: 100px;
-  position:relative;
-}
-.brazos .brazo:first-child{
-left:0.5em;
-transform:rotateZ(45deg) translateY(20px);
-z-index:-1;
-border:1px solid black;
-
-}
-.brazos .brazo:last-child{
-right:0.5em;
-transform:rotateZ(-45deg) translateY(20px);
-z-index:-1;
-animation:saludo 1s both infinite;
-border:1px solid black;
-}
-@keyframes saludo{
-0%{}
-50%{transform:rotateZ(-130deg) translateY(30px)}
-100%{}
-}
-.brazo {
-    width: 20px;
-    height: 80px;
-    background-color: #f7ddc4;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-  position:absolute;
-}
-
-/* Pantalón */
-.pantalon {
-    width: 60px;
-    height: 80px;
-    background-color: #333;
-  border:1px solid black;
-}
-
-/* Zapatillas */
-.zapatillas {
-    width: 80px;
-    height: 20px;
-    background-color: #111;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-}
-/* Modal Edit Avatar */
 
 /* Modal Container */
 
@@ -1216,9 +1051,23 @@ margin-bottom: 1em;
   /* Dashboard Sections 800 */
     
   /* Modal Container 800 */
+  .modalContent{
+height: 90%;
+  }
 .modalBtnList button{
   width: 450px;
 }
+/* Modal Colors 800 */
+
+.colors{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  left: 0 !important;
+  bottom: -0.7em;
+}
+
+/* Modal Colors 800 */
 
   /* Modal Container 800 */
 }

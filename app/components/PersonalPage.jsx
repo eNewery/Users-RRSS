@@ -9,7 +9,6 @@ import ArrowBack from "./ArrowBack";
 import Privacity from "./Privacity";
 import ProfileSection from "./ProfileSection";
 import { toast } from "react-toastify";
-import EditAvatar from "./EditAvatar";
 
 const PersonalPage = () => {
   const [itemPrivacity, setItemPrivacity] = useState("");
@@ -290,13 +289,7 @@ function handleSubmit() {
                 ) : (
                   ""
                 )}
-                    {context.profile === true ? (
-                      <button onClick={() => setModalContent("editAvatar")}>
-                        Editar Avatar
-                      </button>
-                    ) : (
-                      ""
-                    )}
+                  
                 {context.profile === true ? (
                   <button onClick={() => setModalContent("privacity")}>
                     Privacidad
@@ -339,11 +332,6 @@ function handleSubmit() {
               <div className="privacityContainer allModalContent">
                 <ArrowBack data={setModalContent} />
                 <Privacity setPrivacity={setPrivacity} />
-              </div>
-            ) : modalContent === "editAvatar" ? (
-              <div className="privacityContainer allModalContent">
-                <ArrowBack data={setModalContent} />
-                <EditAvatar/>
               </div>
             ) : (
               setModalContent("")
