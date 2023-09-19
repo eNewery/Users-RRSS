@@ -8,6 +8,7 @@ import { MiContexto } from "../components/context";
 import DashboardFeed from "../components/DashboardFeed";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Messages from "../components/Messages";
 const Dashboard = () => {
   const router = useRouter();
   const context = useContext(MiContexto)
@@ -33,7 +34,7 @@ const Dashboard = () => {
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
         />
       <Header />
-      {context.dashboardContent === "personalPage" ? <PersonalPage/> : context.dashboardContent === "dashboardFeed" ? <DashboardFeed/> : "" }
+      {context.dashboardContent === "personalPage" ? <PersonalPage/> : context.dashboardContent === "dashboardFeed" ? <DashboardFeed/> : context.dashboardContent === "messages" ? <Messages/> : "" }
 <ToastContainer/>
       
         </div>

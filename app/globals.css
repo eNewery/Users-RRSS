@@ -439,9 +439,12 @@ padding: 10px;
   cursor: pointer;
 }
 .myAccountMedia{
-  display: none !important;
+  position: absolute;
+  opacity: 0;
+  left: 0;
+  display: none;
 }
-.header-center {
+.header-center { 
   flex-grow: 1;
   text-align: center;
 }
@@ -461,6 +464,9 @@ padding: 10px;
   height: 50px;
   color: #fdfefd;
   outline: none;
+}
+.searchInputMedia{
+  display: none;
 }
 .searchItemContainer {
   display: none;
@@ -946,16 +952,61 @@ animation: noPostsEnter 1s both;
 
 /* Perfil Modal  */
 
+/* Messages Container */
+.messagesContainer{
+  display: flex;
+}
+.userName{
+text-align: center;
+padding: 1em;
+}
+  .chatItemsContainer{
+  display: flex;
+  color: white;
+}
+.chatItems{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #4c4a54;
+gap: 1em;
+padding: 1em;
+}
+.chatItem{
+  cursor: pointer;
+}
+.chatScreen{
+  width: 600px;
+  height: 700px;
+  display: flex;
+  flex-direction: column;
+  background-color: #37363e;
+  justify-content: space-between;
+}
+.inputChat{
+  outline: none;
+  border: none;
+  height: 30px;
+  box-shadow: none;
+  background-color: #37363e;
+  color: #a3a1aa;
+  text-align: center;
+  width: 100%;
+}
+/* Messages Container */
+
+
 
 /* Media Queries 768 */
 @media (max-width: 800px) {
   /* Header 800 */
   .myAccountMedia{
+    position: initial;
+    opacity: 1;
     color: white;
     padding: 0.2em;
     border-radius: 1em;
     cursor: pointer;
-    display: flex !important;
     font-size: 32px !important;
     font-weight: 200 !important;
   }
@@ -965,23 +1016,25 @@ animation: noPostsEnter 1s both;
   .myAccount{
     display: none;
   }
-  .searchInput {
-    width: 300px;
+  .searchInputContainer{
+    display: none;
   }
-  .searchInput:focus ~ .searchItemContainer {
-    width: 300px;
-  }
-  .searchItemContainer:hover {
+  .searchInputContainerMedia{
     display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    width: 300px;
-    height: 30px;
-    background: #4c4a54;
-    color: white;
-    position: absolute;
-    top: 55px;
+  }
+  .searchInputMedia{
+    display: flex;
+  }
+  .searchInput {
+    animation: extendSearch 1s both;
+  }
+  @keyframes extendSearch {
+    0%{width: 0%;}
+    100%{width: 100%;}
+  }
+  @keyframes extendSearch-o {
+    0%{width: 100%;}
+    100%{width: 0%; background-color: none;}
   }
   /* Header 800 */
 
@@ -1076,9 +1129,7 @@ height: 90%;
 /* Media Queries 568 */
 @media (max-width: 568px) {
   /* Header 568 */
-  .searchInput {
-    width: 150px;
-  }
+ 
   .searchInput:focus ~ .searchItemContainer {
     width: 150px;
   }

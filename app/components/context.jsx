@@ -13,6 +13,8 @@ import {
 } from "firebase/firestore";
 const MiContexto = createContext();
 const MiContextoProvider = ({ children }) => {
+  const [messagesData ,setMessagesData] = useState([])
+  const [messages, setMessages] = useState([])
   const [modalData, setModalData] = useState([]);
   const [data, setData] = useState([]);
   const [title, setTitle] = useState("");
@@ -192,12 +194,31 @@ getUserDoc(data.id)
       return null;
     }
   }
-  const colors = [{colorName:"blue", colorId:1}, {colorName:"red", colorId:2}, {colorName:"green", colorId:3}, {colorName:"yellow", colorId:4}, {colorName:"purple", colorId:5}, {colorName:"orange", colorId:6}, {colorName:"pink", colorId:7}, {colorName:"black", colorId:8}, {colorName:"brown", colorId:9}, {colorName:"grey", colorId:10}]
+  async function getMessages(){
+    const docRef = doc(db, "users", "messages");
+    const docSnapshot = await getDoc(docRef);
+    setMessages(docSnapshot.data())
+  }
+  useEffect(() => {
+getMessages()
+// Obtener todos los chatIds del array 'chats' en 'messages'
+const chatIdsEnChats = userData.friends?.map((chat) => parseInt(chat.chatId));
+
+// Realizar la búsqueda en 'friends' y convertir 'chatId' a número
+const amigosConMensajes = messages.chats?.filter((friend) =>
+  chatIdsEnChats.includes(parseInt(friend.chatId))
+);
+setMessagesData(amigosConMensajes);
+  }, [userData])
+  
   return (
     
     <MiContexto.Provider
       value={{
-        colors,
+        setMessagesData,
+        messagesData,
+        setMessages,
+        messages,
         getUserDoc,
         data,
         clickCount,

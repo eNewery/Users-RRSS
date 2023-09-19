@@ -100,6 +100,19 @@ const [request, setRequest] = useState(false)
           console.error("Error al cargar la foto:", error);
         }
       };
+      
+      
+      
+      
+      async function sendMessage() {
+        context.setDashboardContent("messages")
+ 
+
+      }
+
+
+
+
   return (
     <div className="profileContainer">
               {context.user.displayName !== context.data.username ? (
@@ -137,7 +150,7 @@ const [request, setRequest] = useState(false)
                 </p>
                 {context.user.displayName !== context.data.username ? (
                   isFriend === true ? (
-                    <p className="isFriend">¡Ya son amigos! </p>
+                    <button onClick={sendMessage}>Enviar Mensaje</button>
                   ) : (
                     <div>
                         {request ? <p className='requestExists'>Hay una solicitud pendiente</p> : addFriendBtn === false ? (

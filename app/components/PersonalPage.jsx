@@ -164,20 +164,27 @@ const PersonalPage = () => {
     context.setClickCount((prevCount) => prevCount + 1);
   }
   async function acceptFriend(friend, id) {
+    const date = Date.now()
+    const messages = doc(db, "users", "messages");
+    await updateDoc(messages, {
+      ["chats"]: arrayUnion({users:[friend, context.user.displayName],chatId:date, messages: []})
+    })
     const docReference = doc(db, "users", id.toString());
     const filtered = context.data.friendRequests.filter(
       (item) => item.userData !== friend
     );
+
     await updateDoc(docReference, {
       ["friends"]: arrayUnion({
         username: context.user.displayName,
         id: context.user.uid,
+        chatId: date 
       }),
     });
     const docRef = doc(db, "users", context.user.uid.toString());
     await updateDoc(docRef, {
       ["friendRequests"]: filtered,
-      ["friends"]: arrayUnion({ username: friend, id: id }),
+      ["friends"]: arrayUnion({ username: friend, id: id, chatId: date}),
     });
     toast.success(
       `Aceptaste la solicitud de ${friend}`,

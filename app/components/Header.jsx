@@ -1,8 +1,30 @@
 "use client"
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { MiContexto } from './context'
 import { auth } from '../firebase'
 const Header = () => {
+  const [searchState, setSearchState] = useState(false)
+  function setSearch() {
+    const links = document.querySelectorAll(".myAccountMedia")
+    const inputSearch = document.querySelector(".searchInput")
+      links?.forEach(item => item.style.display = "none")
+      inputSearch.style.animationName = "extendSearch"
+      inputSearch.style.animationDuration = "1s"
+      inputSearch.style.animationFillMode = "both"
+      setSearchState(!searchState)
+    }
+    function getUser(user) {
+      const links = document.querySelectorAll(".myAccountMedia")
+      const inputSearch = document.querySelector(".searchInput")
+      inputSearch.style.animationName = "extendSearch-o"
+      inputSearch.style.animationDuration = "1s"
+      inputSearch.style.animationFillMode = "both"
+      context.getUserSearchDoc(user)
+      setTimeout(() => {
+  links?.forEach(item => item.style.display = "flex")
+  setSearchState(!searchState)
+}, 1000);
+  }
     const handleLogout = async () => {
         try {
           context.setDashboardContent("personalPage")
@@ -33,6 +55,17 @@ person
             </nav>
         </div>
         <div className="header-center">
+       {searchState === false ? <span onClick={() => setSearch()} class="material-symbols-outlined searchInputMedia myAccountMedia">
+search
+</span> : <div className="searchInputContainerMedia">
+            <input type="text" className="searchInput" onChange={(e) => context.setSearch(e.target.value)} placeholder="Buscar..."/>
+            {context.results?.map((item) => (
+        <div className='searchItemContainer' key={item.id} onClick={() => getUser(item.username)}>
+          <p className='searchItem'>{item.username}</p>
+        </div>
+      ))}
+            </div>}
+        
             <div className="searchInputContainer">
             <input type="text" className="searchInput" onChange={(e) => context.setSearch(e.target.value)} placeholder="Buscar..."/>
             {context.results?.map((item) => (
