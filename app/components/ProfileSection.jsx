@@ -106,8 +106,6 @@ const [request, setRequest] = useState(false)
       
       async function sendMessage() {
         context.setDashboardContent("messages")
- 
-
       }
 
 

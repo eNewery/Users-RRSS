@@ -13,6 +13,8 @@ import {
 } from "firebase/firestore";
 const MiContexto = createContext();
 const MiContextoProvider = ({ children }) => {
+const [actualChatId, setActualChatId] = useState("")
+const [chatUsername, setChatUsername] = useState("")
   const [messagesData ,setMessagesData] = useState([])
   const [messages, setMessages] = useState([])
   const [modalData, setModalData] = useState([]);
@@ -208,13 +210,17 @@ const chatIdsEnChats = userData.friends?.map((chat) => parseInt(chat.chatId));
 const amigosConMensajes = messages.chats?.filter((friend) =>
   chatIdsEnChats.includes(parseInt(friend.chatId))
 );
+console.log("Función funcionando, parámetros:", amigosConMensajes, chatIdsEnChats)
 setMessagesData(amigosConMensajes);
-  }, [userData])
-  
+
+  }, [userData, dashboardContent])
+ 
   return (
     
     <MiContexto.Provider
       value={{
+        chatUsername, setChatUsername,
+        getMessages,
         setMessagesData,
         messagesData,
         setMessages,
@@ -238,6 +244,7 @@ setMessagesData(amigosConMensajes);
         setIsRegistered,
         dashboardContent,
          setDashboardContent,
+         actualChatId, setActualChatId,
          user, setUser, userData, setUserData, getYourUserData, handleSubmit, posts, title, setTitle, modalSettings, setModalSettings, getUserModalDoc, modalData, setModalData }}
     >
       {children}

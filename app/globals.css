@@ -447,6 +447,8 @@ padding: 10px;
 .header-center { 
   flex-grow: 1;
   text-align: center;
+  display: flex;
+  justify-content: center;
 }
 
 .searchInputContainer {
@@ -956,9 +958,23 @@ animation: noPostsEnter 1s both;
 .messagesContainer{
   display: flex;
 }
+.dashboardMessages{
+  display: flex;
+justify-content: center;
+align-items: center
+}
 .userName{
 text-align: center;
 padding: 1em;
+}
+.userAndImage{
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.userImage{
+width: 32px;
+border-radius: 50%;
 }
   .chatItemsContainer{
   display: flex;
@@ -993,6 +1009,31 @@ padding: 1em;
   text-align: center;
   width: 100%;
 }
+.screenMessages{
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1em;
+  overflow:auto;
+  gap: 1em;
+}
+.messageHour{
+  font-size: 12px;
+}
+.screenMessageItem{
+display: flex;
+flex-direction: column;
+justify-content: center;
+gap: 0.2em;
+}
+
+.screenMessageItemRight{
+  align-self:flex-end;
+}
+.screenMessageItemLeft{
+align-self: flex-start;
+}
 /* Messages Container */
 
 
@@ -1000,6 +1041,10 @@ padding: 1em;
 /* Media Queries 768 */
 @media (max-width: 800px) {
   /* Header 800 */
+  .searchInputContainerMedia span{
+    color: white;
+    font-weight: 400;
+   }
   .myAccountMedia{
     position: initial;
     opacity: 1;
@@ -1021,6 +1066,10 @@ padding: 1em;
   }
   .searchInputContainerMedia{
     display: flex;
+    background-color: #37363e;
+    align-items: center;
+    width: 500px !important;
+    padding-right: 0.5em;
   }
   .searchInputMedia{
     display: flex;
@@ -1029,12 +1078,12 @@ padding: 1em;
     animation: extendSearch 1s both;
   }
   @keyframes extendSearch {
-    0%{width: 0%;}
-    100%{width: 100%;}
+    0%{width: 0%; transform: scale(0);}
+    100%{width: 100%; transform: scale(1);}
   }
   @keyframes extendSearch-o {
     0%{width: 100%;}
-    100%{width: 0%; background-color: none;}
+    100%{width: 0%; background-color: none; transform: scale(0);}
   }
   /* Header 800 */
 
@@ -1123,22 +1172,52 @@ height: 90%;
 /* Modal Colors 800 */
 
   /* Modal Container 800 */
+
+/* Messages 800 */
+.dashboardMessages{
+  width: 340px !important;
+}
+.screenMessages{
+width:360px;
+}
+.chatScreen{
+  width: 360px;
+  height: 500px;
+}
+.chatItemsContainer{
+  position: relative;
+  margin-bottom: 1em;
+}
+.chatItems{
+  position: absolute;
+  bottom: -3em;
+  height: auto;
+  width: 360px;
+  flex-direction: row;
+  overflow-x: auto;
+}
+/* Messages 800 */
+
+
 }
 /* Media Queries 800 */
 
 /* Media Queries 568 */
 @media (max-width: 568px) {
   /* Header 568 */
- 
+ .searchInputContainerMedia{
+  width: 300px !important;
+ }
+
   .searchInput:focus ~ .searchItemContainer {
-    width: 150px;
+    width: 300px;
   }
   .searchItemContainer:hover {
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    width: 150px;
+    width: 300px;
     height: 30px;
     background: #4c4a54;
     color: white;
