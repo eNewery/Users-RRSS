@@ -4,6 +4,7 @@ En progreso, cambios próximamente.
 Funciones disponibles:
 • Registrarse o iniciar sesión
 • Editar Perfil 
+• Ver información personal de otros usuarios públicos
 • Agregar amigos, aceptar o rechazar solicitudes
 • Buscar usuarios
 • Cambiar la foto de perfil
